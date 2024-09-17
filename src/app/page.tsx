@@ -22,34 +22,46 @@ const Messages: React.FC<MessagesProps> = ({ messages }) => {
 interface InputFormProps {
   input: string
   handleInputChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void
-  handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void
+  sendMessage: () => void
 }
 
 const InputForm: React.FC<InputFormProps> = ({
   input,
   handleInputChange,
-  handleSubmit
+  sendMessage
 }) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault()
+      sendMessage()
+    }
+  }
+
   return (
-    <form onSubmit={handleSubmit} className='p-4'>
+    <div className='p-4'>
       <textarea
         className='w-full p-2 border border-gray-300 rounded shadow-xl resize-none'
         value={input}
         placeholder='Say something...'
         onChange={handleInputChange}
+        onKeyDown={handleKeyDown}
         rows={2}
       />
       <button
-        type='submit'
+        onClick={sendMessage}
         className='mt-2 p-2 bg-blue-500 text-white rounded shadow-md w-full'>
         Send
       </button>
-    </form>
+    </div>
   )
 }
 
 export default function Chat() {
-  const { messages, input, handleInputChange, handleSubmit } = useChat({})
+  const { messages, input, handleInputChange, handleSubmit } = useChat()
+
+  const sendMessage = () => {
+    handleSubmit()
+  }
 
   return (
     <div className='flex w-screen h-screen'>
@@ -58,9 +70,10 @@ export default function Chat() {
         <InputForm
           input={input}
           handleInputChange={handleInputChange}
-          handleSubmit={handleSubmit}
+          sendMessage={sendMessage}
         />
       </div>
+
       <div className='w-1/2 p-4'>
         <div className='h-full flex justify-center items-center text-gray-500'>
           Right side content
