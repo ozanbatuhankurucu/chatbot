@@ -1,20 +1,42 @@
 'use client'
 
 import { Message, useChat } from 'ai/react'
+import { useEffect, useRef } from 'react'
 
 interface MessagesProps {
   messages: Message[]
 }
 
 const Messages: React.FC<MessagesProps> = ({ messages }) => {
+  const messagesEndRef = useRef<HTMLDivElement>(null)
+
+  // Scroll to bottom when new messages are added
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' })
+    }
+  }, [messages]) // Trigger when messages change
+
   return (
     <div className='flex-1 p-4 overflow-y-auto border-gray-300'>
       {messages.map((m) => (
-        <div key={m.id} className='whitespace-pre-wrap mb-2'>
-          {m.role === 'user' ? 'User: ' : 'AI: '}
-          {m.content}
+        <div
+          key={m.id}
+          className={`flex mb-4 ${
+            m.role === 'user' ? 'justify-end' : 'justify-start'
+          }`}>
+          <div
+            className={`p-3 max-w-[70%] rounded-lg ${
+              m.role === 'user'
+                ? 'bg-gray-200 text-black' // User messages style
+                : 'bg-slate-700 text-white' // Bot messages style
+            }`}
+            style={{ whiteSpace: 'pre-wrap' }}>
+            {m.content}
+          </div>
         </div>
       ))}
+      <div ref={messagesEndRef} />
     </div>
   )
 }
