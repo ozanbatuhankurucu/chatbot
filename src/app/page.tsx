@@ -95,7 +95,6 @@ export default function Chat() {
           sendMessage={sendMessage}
         />
       </div>
-
       <div className='w-1/2 p-4'>
         <div className='h-full flex justify-center items-center text-gray-500'>
           Right side content
