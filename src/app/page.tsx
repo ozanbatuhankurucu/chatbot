@@ -81,10 +81,6 @@ const InputForm: React.FC<InputFormProps> = ({
 export default function Chat() {
   const { messages, input, handleInputChange, handleSubmit } = useChat()
 
-  const sendMessage = () => {
-    handleSubmit()
-  }
-
   return (
     <div className='flex w-screen h-screen'>
       <div className='w-1/2 flex flex-col border-r'>
@@ -92,7 +88,7 @@ export default function Chat() {
         <InputForm
           input={input}
           handleInputChange={handleInputChange}
-          sendMessage={sendMessage}
+          sendMessage={handleSubmit}
         />
       </div>
       <div className='w-1/2 p-4'>
